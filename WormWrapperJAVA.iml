@@ -16,12 +16,14 @@
     <orderEntry type="library" name="Maven: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
     <orderEntry type="library" name="Maven: com.sleepycat:je:5.0.84" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tika:tika-parsers:1.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tika:tika-core:1.14" level="project" />
     <orderEntry type="library" name="Maven: org.gagravarr:vorbis-java-tika:0.8" level="project" />
     <orderEntry type="library" name="Maven: com.healthmarketscience.jackcess:jackcess:2.1.4" level="project" />
+    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: com.healthmarketscience.jackcess:jackcess-encrypt:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.tallison:jmatio:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.james:apache-mime4j-core:0.7.2" level="project" />
@@ -112,12 +114,6 @@
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:3.4.2" level="project" />
     <orderEntry type="library" name="Maven: com.lmax:disruptor:3.3.6" level="project" />
     <orderEntry type="library" name="Maven: net.dongliu:requests:4.10.0" level="project" />
-    <orderEntry type="library" name="Maven: net.sf.json-lib:json-lib:2.4" level="project" />
-    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.0" level="project" />
-    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
-    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.5" level="project" />
-    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
-    <orderEntry type="library" name="Maven: net.sf.ezmorph:ezmorph:1.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations-java5:15.0" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.5" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.5" level="project" />
