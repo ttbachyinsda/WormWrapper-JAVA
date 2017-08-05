@@ -25,7 +25,7 @@ public class FakeMaster {
                 accresult = Requests.get(index_url).send().readToText();
                 jsonParser = new JSONParser();
                 jsonObject = (JSONObject) jsonParser.parse(accresult);
-                System.out.println(accresult);
+                //System.out.println(accresult);
                 collection.insertOne(new Document("timestamp", System.currentTimeMillis())
                         .append("data", accresult), new SingleResultCallback<Void>() {
                     @Override
