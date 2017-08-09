@@ -28,7 +28,7 @@ public class Main {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
         rootLogger.setLevel(Level.OFF);
-        MongoClient mongoClient = MongoClients.create("mongodb://128.199.182.66");
+        MongoClient mongoClient = MongoClients.create("mongodb://165.227.98.172");
         MongoDatabase database = mongoClient.getDatabase("user");
         MongoCollection<Document> collection = database.getCollection("userlist");
 //        collection.deleteMany(new Document(), new SingleResultCallback<DeleteResult>() {

@@ -7,8 +7,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 import java.util.Timer;
+
 
 /**
  * Created by zjkgf on 2017/8/5.
@@ -30,7 +34,9 @@ public class FakeMaster {
                         .append("data", accresult), new SingleResultCallback<Void>() {
                     @Override
                     public void onResult(Void aVoid, Throwable throwable) {
-
+                        Date d = new Date();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        System.out.println("time：" + sdf.format(d));
                     }
                 });
                 break;
