@@ -14,10 +14,8 @@ import org.bson.Document;
 import org.slf4j.LoggerFactory;
 
 import javax.print.Doc;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
+
 /**
  * Created by zjkgf on 2017/7/29.
  */
@@ -28,42 +26,40 @@ public class Main {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
         rootLogger.setLevel(Level.OFF);
-        MongoClient mongoClient = MongoClients.create("mongodb://165.227.98.172");
+        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1");
         MongoDatabase database = mongoClient.getDatabase("user");
-        MongoCollection<Document> collection = database.getCollection("userlist");
-//        collection.deleteMany(new Document(), new SingleResultCallback<DeleteResult>() {
-//            @Override
-//            public void onResult(DeleteResult deleteResult, Throwable throwable) {
-//
-//            }
-//        });
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        ServantEventMain.collection = collection;
+        TimerTask pt = new ProxyThread();
+        Timer c = new Timer();
+        c.schedule(pt,0,10000);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ServantEventMain.database = database;
+        ServantEventMain.initialcollection(true);
 //        try {
 //            ServantEventMain.readyrun();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-//        Set<String> methodlist = new HashSet<>();
+        Set<String> methodlist = new HashSet<>();
         //methodlist.add("getboard");
-//        methodlist.add("getfans");
+        methodlist.add("getfans");
         //methodlist.add("getinfo");
-//        methodlist.add("getpoint");
-//        methodlist.add("getstatus");
+        methodlist.add("getpoint");
+        //methodlist.add("getstatus");
         //methodlist.add("goodvoice");
-        //methodlist.add("nowpublish");
-        //methodlist.add("onlineuser");
+        methodlist.add("nowpublish onlineuser");
         //methodlist.add("roomuser");
         //methodlist.add("simpleall");
         //methodlist.add("skill");
+        //methodlist.add("temp");
         shouldsend = 0;
         havesent = 0;
-//        Master.call(methodlist,20000,60,2);
-        new FakeMaster().call(collection);
+        int methodnum = 4;
+        Master.call(methodlist,60000,60,-1, methodnum);
+//        new FakeMaster().call(collection);
 //        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
 //            @Override
 //            public void onResult(final Void result, final Throwable t) {
@@ -83,10 +79,13 @@ public class Main {
 //                System.out.println(aLong);
 //            }
 //        });
-        for(;;)
+        ThreadPool.pool.shutdown();
+        while (!ThreadPool.pool.isTerminated())
         {
             try {
                 Thread.sleep(2000);
+                System.out.println(ThreadPool.MaxTrynum);
+                System.out.println(ThreadPool.TotalTrynum);
 //                System.out.println(shouldsend);
 //                System.out.println("aaa");
 //                System.out.println(havesent);
@@ -95,5 +94,7 @@ public class Main {
                 e.printStackTrace();
             }
         }
+        System.out.println("Finished");
+        c.cancel();
     }
 }

@@ -143,4 +143,10 @@ public class Weapon {
         }
         return "0";
     }
+    public static void main(String[] args){
+//        Servant a = new S_nowPublish();
+//        a.info = new Document("ykid", "12345678");
+//        a.with_proxy = true;
+//        a.run();
+    }
 }

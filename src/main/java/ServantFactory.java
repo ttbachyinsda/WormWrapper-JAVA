@@ -1,77 +1,77 @@
 import com.lmax.disruptor.EventFactory;
+import com.mongodb.async.SingleResultCallback;
 import com.mongodb.async.client.MongoCollection;
+import com.mongodb.async.client.MongoDatabase;
 import org.bson.Document;
 
 import javax.print.Doc;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zjkgf on 2017/7/31.
  */
-public class ServantFactory {
+public class ServantFactory implements Runnable {
 
-    private List<Servant> servantlist;
     private Document info;
-    public void set(Document _info, MongoCollection<Document> _collection, boolean _with_proxy) throws ResultErrorException
+    public ServantFactory(Document _info)
+    {
+        set(_info);
+    }
+    public void set(Document _info)
     {
         info = _info;
-        String[] methodlist = _info.getString("method").split(" ");
+    }
+
+
+    @Override
+    public void run() {
+        String[] methodlist = info.getString("method").split(" ");
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        Document tempinfo = new Document(info);
         for (String method:methodlist){
-            Servant servant;
+            //System.out.println(method);
             switch (method.trim()){
                 case "getboard":
-                    servant = new S_getBoard();
+                    tempinfo = S_getBoard.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "getfans":
-                    servant = new S_getFans();
+                    tempinfo = S_getFans.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "getinfo":
-                    servant = new S_getInfo();
+                    tempinfo = S_getInfo.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "getpoint":
-                    servant = new S_getPoint();
+                    tempinfo = S_getPoint.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "goodvoice":
-                    servant = new S_goodVoice();
+                    tempinfo = S_goodVoice.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "nowpublish":
-                    servant = new S_nowPublish();
+                    tempinfo = S_nowPublish.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "onlineuser":
-                    servant = new S_onlineUser();
+                    tempinfo = S_onlineUser.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "roomuser":
-                    servant = new S_roomUser();
+                    tempinfo = S_roomUser.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "simpleall":
-                    servant = new S_simpleAll();
+                    tempinfo = S_simpleAll.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "skill":
-                    servant = new S_skill();
+                    tempinfo = S_skill.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 case "getstatus":
-                    servant = new S_getStatus();
+                    tempinfo = S_getStatus.run(tempinfo, ProxyChooser.WITH_PROXY);
+                    break;
+                case "temp":
+                    tempinfo = S_temp.run(tempinfo, ProxyChooser.WITH_PROXY);
                     break;
                 default:
-                    throw new ResultErrorException("Unknown method");
-            }
-            servant.set(_info,_collection,_with_proxy);
-            servantlist.add(servant);
-        }
-    }
-    public void run()
-    {
-        for (int i=0;i<servantlist.size();i++)
-        {
-            Servant servant = servantlist.get(i);
-            Document result = servant.run();
-            Document resultinfo = info.append("result",result.getString("result"));
-            if (i+1<servantlist.size())
-            {
-                servantlist.get(i+1).info = resultinfo;
-                System.out.println(servantlist.get(i+1).info);
-            } else {
-                return;
+                    System.out.println("Unknown method " + method);
             }
         }
     }

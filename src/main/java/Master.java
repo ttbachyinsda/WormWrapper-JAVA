@@ -1,3 +1,4 @@
+import com.mongodb.async.SingleResultCallback;
 import net.dongliu.requests.Requests;
 import org.bson.Document;
 import org.json.simple.JSONArray;
@@ -5,37 +6,27 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.concurrent.Future;
 
 /**
  * Created by zjkgf on 2017/7/31.
  */
 public class Master {
     public static boolean MASTERSTOPFLAG = false;
-    public static void pushit(Set<String> methodlist, Document rawdoc, String ispub){
-        if (false){
-            for (String element:methodlist){
-                if (element.equals("getstatus")){
-                    Main.shouldsend ++;
-                    Document document = rawdoc;
-                    document.append("method", "getstatus");
-                    ServantEventMain.ringBuffer.publishEvent(ServantEventMain::translate, document, ServantEventMain.collection, false);
-                }
-            }
-        } else if (true){
-            for (String element:methodlist){
-                Main.shouldsend ++;
-                Document document = rawdoc;
-                document.append("method", element);
-                ServantEventMain.ringBuffer.publishEvent(ServantEventMain::translate, document, ServantEventMain.collection, false);
-            }
-        } else {
-            System.out.println("PARAM ERROR!!!");
+    public static void pushit(Set<String> methodlist, Document rawdoc, int num){
+        for (String element:methodlist){
+            Main.shouldsend ++;
+            Document document = new Document(rawdoc);
+            document.append("method", element);
+            //ServantEventMain.ringBuffer.publishEvent(ServantEventMain::translate, document, ServantEventMain.collectionlist);
+            ThreadPool.pool.execute(new ServantFactory(document));
         }
     }
-    public static void getHotList(Set<String> methodlist, int politetime){
+    public static void getHotList(Set<String> methodlist, int politetime, int methodnum){
+        Timestamp tss = new Timestamp(System.currentTimeMillis());
+        System.out.println(tss.toString());
         JSONObject jsonObject;
         JSONParser jsonParser;
         String accresult;
@@ -53,6 +44,7 @@ public class Master {
         JSONArray jsonArray = (JSONArray)jsonObject.get("lives");
         for (int i=0;i<jsonArray.size();i++)
         {
+            //System.out.println(i);
             JSONObject creator = (JSONObject)((JSONObject)jsonArray.get(i)).get("creator");
             long online_users = (Long) ((JSONObject)jsonArray.get(i)).get("online_users");
             String portrait = (String) creator.get("portrait");
@@ -60,27 +52,37 @@ public class Master {
             String nick = (String) creator.get("nick");
             long id = (Long) creator.get("id");
             long level = (Long) creator.get("level");
-            System.out.println(i+" ^^^ "+online_users+" "+portrait+" "+gender+" "+nick+" "+id+" "+level);
             String ykid = String.valueOf(id);
-            String[] param = Weapon.isLive(ykid);
-            Document document = new Document("ykid",ykid).append("roomid",param[1]).append("portrait",portrait)
-                    .append("gender",String.valueOf(gender)).append("nick",nick).append("online_users",String.valueOf(online_users))
-                    .append("level",String.valueOf("level"));
-            pushit(methodlist,document,param[0]);
-            try {
-                Thread.sleep(politetime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
+            Document document = new Document("ykid",ykid).append("ts", ts.toString());
+            pushit(methodlist,document,i);
         }
     }
-    public static void call(Set<String> methodlist, int delaytime, int politetime, int maxtime)
+    public static void call(Set<String> methodlist, int delaytime, int politetime, int maxtime, int methodnum)
     {
-        TaskExecutor task = new TaskExecutor(methodlist, delaytime, politetime, maxtime);
-        Timer timer = new Timer();
-        long delay = 0;
-        long intevalPeriod = delaytime;
-        // schedules the task to be run in an interval
-        timer.scheduleAtFixedRate(task, delay, intevalPeriod);
+        if (maxtime == -1) {
+            int nowtime = 0;
+            while (true) {
+                System.out.println("运行到第"+String.valueOf(nowtime)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                new TaskExecutor(methodlist, delaytime, politetime, maxtime, methodnum).start();
+                try {
+                    Thread.sleep(delaytime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                nowtime += 1;
+            }
+        }
+        else {
+            for (int i=0;i<maxtime;i++){
+                System.out.println("运行到第"+String.valueOf(i)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                new TaskExecutor(methodlist, delaytime, politetime, maxtime, methodnum).start();
+                try {
+                    Thread.sleep(delaytime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

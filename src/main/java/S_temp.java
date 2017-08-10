@@ -6,11 +6,8 @@ import net.dongliu.requests.RawResponse;
 import net.dongliu.requests.Requests;
 import org.bson.Document;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.Timestamp;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,31 +15,29 @@ import java.util.regex.Pattern;
 import static java.lang.Math.max;
 
 /**
- * Created by zjkgf on 2017/7/29.
+ * Created by zjkgf on 2017/8/10.
  */
-public class S_nowPublish{
-
+public class S_temp {
     public static MongoCollection<Document> collection;
     public static Document run(Document info, boolean with_proxy) {
         String ykid = info.getString("ykid");
-        String index_url = "http://service.inke.com/api/live/now_publish?cv=IK3.7.20_Android&uid=251464826&id=" + ykid;
+        String index_url = "http://120.55.238.158/api/user/relation/numrelations?uid=251464826&id=" + ykid;
         int try_num = 0;
-        int max_num = 100;
-        String result, trueresult;
+        int max_num = 300;
         Timestamp pret = new Timestamp(System.currentTimeMillis());
         while (true){
             try{
-                //System.out.println(ykid+" "+"nowpublish");
+                //System.out.println(ykid+" "+"getfans");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
                 if (next.getTime()-pret.getTime() > 60000)
                 {
-                    result = "";
+                    String result = "";
                     //genmap(result);
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim()).append("ts", ts.toString());
+                    Document doc = new Document("timestamp", info.getString("ts"))
+                            .append("ykid", ykid).append("result", result.trim()).append("ts", ts.toString());
                     collection.insertOne(doc, new SingleResultCallback<Void>() {
                         @Override
                         public void onResult(Void aVoid, Throwable throwable) {
@@ -58,23 +53,25 @@ public class S_nowPublish{
                     throw new ResultErrorException("code error");
                 }
                 String accresult = tap.readToText();
-                if (accresult.indexOf("live") != -1) {
-                    result = accresult.toString();
-                    trueresult = "True";
-                }
-                else {
-                    result = "";
-                    trueresult = "False";
-                }
+                String inx = "\"num_followers\":\\d+";
+                String outx = "\"num_followings\":\\d+";
+                Pattern pin = Pattern.compile(inx);
+                Pattern pout = Pattern.compile(outx);
+                Matcher min = pin.matcher(accresult);
+                Matcher mout = pout.matcher(accresult);
+                if (!min.find()) throw new ResultErrorException("Result of getFans inx is Error. "+accresult);
+                if (!mout.find()) throw new ResultErrorException("Result of getFans outx is Error. "+accresult);
+                String[] sin = min.group().split(":");
+                String[] sout = mout.group().split(":");
+                String result = sin[sin.length-1]+" "+sout[sout.length-1];
+                //System.out.println(accresult+" "+result);
                 //genmap(result);
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
-                Document doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                        .append("result", result.trim());
-                Document doc2 = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                        .append("nowpublish", trueresult).append("ts", ts.toString());
-                collection.insertOne(doc2, new SingleResultCallback<Void>() {
+                Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
+                        .append("result", result.trim()).append("ts", ts.toString());
+                collection.insertOne(doc, new SingleResultCallback<Void>() {
                     @Override
                     public void onResult(Void aVoid, Throwable throwable) {
                         Main.havesent ++;
@@ -82,25 +79,18 @@ public class S_nowPublish{
                 });
                 return doc;
             }catch (Exception e) {
-//                try {
-//                    Thread.sleep(20000);
-//                } catch (InterruptedException e1) {
-//                    e1.printStackTrace();
-//                }
+                //e.printStackTrace();
                 try_num += 1;
                 if (try_num >= max_num+1) {
-                    System.out.println("NOWPUBLISH TIMEOUT");
-                    result = "";
-                    trueresult = "False";
+                    System.out.println("GETFANS TIMEOUT");
+                    String result = "";
                     //genmap(result);
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim());
-                    Document doc2 = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                            .append("nowpublish", trueresult).append("ts", ts.toString());
-                    collection.insertOne(doc2, new SingleResultCallback<Void>() {
+                    Document doc = new Document("timestamp", info.getString("ts"))
+                            .append("ykid", ykid).append("result", result.trim()).append("ts", ts.toString());
+                    collection.insertOne(doc, new SingleResultCallback<Void>() {
                         @Override
                         public void onResult(Void aVoid, Throwable throwable) {
                             Main.havesent ++;

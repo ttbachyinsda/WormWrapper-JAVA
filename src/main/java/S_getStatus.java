@@ -1,4 +1,5 @@
 import com.mongodb.async.SingleResultCallback;
+import com.mongodb.async.client.MongoCollection;
 import org.bson.Document;
 import org.json.JSONObject;
 
@@ -7,9 +8,9 @@ import java.sql.Timestamp;
 /**
  * Created by zjkgf on 2017/7/31.
  */
-public class S_getStatus extends Servant{
-    @Override
-    Document run() {
+public class S_getStatus{
+    public static MongoCollection<Document> collection;
+    public static Document run(Document info, boolean with_proxy) {
         String ykid = info.getString("ykid");
         String roomid = info.getString("roomid");
         String portrait = info.getString("portrait");
@@ -31,9 +32,10 @@ public class S_getStatus extends Servant{
         jsonObject.append("online_users", online_users);
         jsonObject.append("rank", rank);
         jsonObject.append("timestamp", timestamp);
+        //genmap(jsonObject.toString());
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        Document doc = new Document("timestamp", ts.toString()).append("ykid", ykid)
-                .append("method", "getstatus").append("result", jsonObject.toString());
+        Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
+                .append("result", jsonObject.toString());
         collection.insertOne(doc, new SingleResultCallback<Void>() {
             @Override
             public void onResult(Void aVoid, Throwable throwable) {

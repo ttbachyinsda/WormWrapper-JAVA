@@ -1,4 +1,5 @@
 import com.mongodb.async.SingleResultCallback;
+import com.mongodb.async.client.MongoCollection;
 import net.dongliu.requests.Requests;
 import org.bson.Document;
 import org.json.JSONObject;
@@ -12,9 +13,9 @@ import java.util.regex.Pattern;
 /**
  * Created by zjkgf on 2017/7/29.
  */
-public class S_getBoard extends Servant{
-
-    Document run() {
+public class S_getBoard{
+    public static MongoCollection<Document> collection;
+    public static Document run(Document info, boolean with_proxy) {
         String ykid = info.getString("ykid");
         StringBuffer result = new StringBuffer();
         Map<String, Object> parameterMap = new HashMap<String, Object>();
@@ -58,9 +59,10 @@ public class S_getBoard extends Servant{
             result.append(element);
             result.append(' ');
         }
+        //genmap(result.toString());
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        Document doc = new Document("timestamp", ts.toString()).append("ykid", ykid)
-                .append("method", "getboard").append("result", result.toString().trim());
+        Document doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                .append("result", result.toString().trim());
         collection.insertOne(doc, new SingleResultCallback<Void>() {
             @Override
             public void onResult(Void aVoid, Throwable throwable) {
