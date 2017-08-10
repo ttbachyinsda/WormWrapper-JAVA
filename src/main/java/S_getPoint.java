@@ -32,8 +32,9 @@ public class S_getPoint{
             try{
                 //System.out.println(ykid+" "+"getpoint");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
-                if (next.getTime()-pret.getTime() > 60000)
+                if (next.getTime()-pret.getTime() > 120000)
                 {
+                    System.out.println("GETPOINT TIMEOUT");
                     String result = "";
                     //genmap(result);
                     ThreadPool.TotalTrynum += try_num;

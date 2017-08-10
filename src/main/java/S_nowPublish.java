@@ -35,8 +35,9 @@ public class S_nowPublish{
             try{
                 //System.out.println(ykid+" "+"nowpublish");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
-                if (next.getTime()-pret.getTime() > 60000)
+                if (next.getTime()-pret.getTime() > 120000)
                 {
+                    System.out.println("NOWPUBLISH RTIMEOUT");
                     result = "";
                     //genmap(result);
                     ThreadPool.TotalTrynum += try_num;

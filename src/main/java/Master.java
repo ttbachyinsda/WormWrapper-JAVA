@@ -56,7 +56,8 @@ public class Master {
             String ykid = String.valueOf(id);
             Timestamp ts = new Timestamp(System.currentTimeMillis());
             Document document = new Document("ykid",ykid).append("ts", ts.toString());
-            pushit(methodlist,document,i);
+            for (int j=0;j<2;j++)
+                pushit(methodlist,document,i);
         }
     }
     public static void call(Set<String> methodlist, int delaytime, int politetime, int maxtime, int methodnum)

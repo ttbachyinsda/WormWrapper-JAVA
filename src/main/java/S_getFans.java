@@ -34,8 +34,9 @@ public class S_getFans{
             try{
                 //System.out.println(ykid+" "+"getfans");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
-                if (next.getTime()-pret.getTime() > 60000)
+                if (next.getTime()-pret.getTime() > 120000)
                 {
+                    System.out.println("GETFANS RTIMEOUT");
                     String result = "";
                     //genmap(result);
                     ThreadPool.TotalTrynum += try_num;

@@ -45,8 +45,9 @@ public class S_onlineUser{
                 //System.out.println(ykid+" "+"onlineuser");
 
                 Timestamp next = new Timestamp(System.currentTimeMillis());
-                if (next.getTime()-pret.getTime() > 6000)
+                if (next.getTime()-pret.getTime() > 120000)
                 {
+                    System.out.println("ONLINEUSER RTIMEOUT");
                     //genmap(result);
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
@@ -77,7 +78,7 @@ public class S_onlineUser{
                     ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num + 1) {
-                    System.out.println("ONLINEUSER TIMEOUT" + " " + accresult);
+                    System.out.println("ONLINEUSER TIMEOUT");
                     break;
                 }
             }
