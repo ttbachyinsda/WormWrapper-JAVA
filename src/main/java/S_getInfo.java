@@ -28,8 +28,10 @@ public class S_getInfo{
         int try_num = 0;
         int max_num = 100;
         while (true){
+            String[] random_proxy = ProxyChooser.chooseproxy();
             try{
-                String[] random_proxy = ProxyChooser.chooseproxy();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
                 if (tap.getStatusCode() != 200)
                 {
@@ -49,7 +51,9 @@ public class S_getInfo{
                 });
                 return doc;
             }catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     String result = "";

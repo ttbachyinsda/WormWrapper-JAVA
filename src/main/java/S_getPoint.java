@@ -28,6 +28,7 @@ public class S_getPoint{
         int max_num = 100;
         Timestamp pret = new Timestamp(System.currentTimeMillis());
         while (true){
+            String[] random_proxy = ProxyChooser.chooseproxy();
             try{
                 //System.out.println(ykid+" "+"getpoint");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
@@ -48,7 +49,7 @@ public class S_getPoint{
                     });
                     return doc;
                 }
-                String[] random_proxy = ProxyChooser.chooseproxy();
+
                 RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
                 if (tap.getStatusCode() != 200)
                 {
@@ -67,6 +68,8 @@ public class S_getPoint{
                 String[] sout = mout.group().split(":");
                 String result = sin[sin.length-1]+" "+sout[sout.length-1];
                 //genmap(result);
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -81,6 +84,8 @@ public class S_getPoint{
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETPOINT TIMEOUT");

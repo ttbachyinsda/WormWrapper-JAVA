@@ -24,6 +24,7 @@ public class Master {
             ThreadPool.pool.execute(new ServantFactory(document));
         }
     }
+    //修改gethotlist函数的相关方法，可以将热门列表修改为指定列表
     public static void getHotList(Set<String> methodlist, int politetime, int methodnum){
         Timestamp tss = new Timestamp(System.currentTimeMillis());
         System.out.println(tss.toString());

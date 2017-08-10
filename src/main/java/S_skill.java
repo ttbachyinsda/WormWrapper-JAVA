@@ -29,8 +29,9 @@ public class S_skill{
         int try_num = 0;
         int max_num = 100;
         while (true){
+            String[] random_proxy = ProxyChooser.chooseproxy();
             try{
-                String[] random_proxy = ProxyChooser.chooseproxy();
+
                 RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
                 if (tap.getStatusCode() != 200)
                 {
@@ -43,6 +44,8 @@ public class S_skill{
                 else
                     result = "False";
                 //genmap(result);
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
                 Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
                         .append("result", result.trim());
@@ -54,7 +57,9 @@ public class S_skill{
                 });
                 return doc;
             }catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     String result = "False";

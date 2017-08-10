@@ -26,6 +26,7 @@ public class S_temp {
         int max_num = 300;
         Timestamp pret = new Timestamp(System.currentTimeMillis());
         while (true){
+            String[] random_proxy = ProxyChooser.chooseproxy();
             try{
                 //System.out.println(ykid+" "+"getfans");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
@@ -46,7 +47,7 @@ public class S_temp {
                     });
                     return doc;
                 }
-                String[] random_proxy = ProxyChooser.chooseproxy();
+
                 RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
                 if (tap.getStatusCode() != 200)
                 {
@@ -64,6 +65,8 @@ public class S_temp {
                 String[] sin = min.group().split(":");
                 String[] sout = mout.group().split(":");
                 String result = sin[sin.length-1]+" "+sout[sout.length-1];
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 //System.out.println(accresult+" "+result);
                 //genmap(result);
                 ThreadPool.TotalTrynum += try_num;
@@ -80,6 +83,8 @@ public class S_temp {
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETFANS TIMEOUT");

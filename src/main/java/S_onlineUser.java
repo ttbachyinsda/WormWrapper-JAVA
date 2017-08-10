@@ -37,9 +37,13 @@ public class S_onlineUser{
         String realurl = index_url + "&start="+start;
         String accresult = "";
         Timestamp pret = new Timestamp(System.currentTimeMillis());
+
         while (true) {
+            String[] random_proxy = ProxyChooser.chooseproxy();
             try {
+
                 //System.out.println(ykid+" "+"onlineuser");
+
                 Timestamp next = new Timestamp(System.currentTimeMillis());
                 if (next.getTime()-pret.getTime() > 6000)
                 {
@@ -57,16 +61,20 @@ public class S_onlineUser{
                     });
                     return doc;
                 }
-                String[] random_proxy = ProxyChooser.chooseproxy();
+
                 RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
                 if (tap.getStatusCode() != 200)
                 {
                     throw new ResultErrorException("code error");
                 }
                 accresult = tap.readToText();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 break;
             } catch (Exception e) {
                 //e.printStackTrace();
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num + 1) {
                     System.out.println("ONLINEUSER TIMEOUT" + " " + accresult);

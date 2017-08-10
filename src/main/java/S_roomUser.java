@@ -32,18 +32,23 @@ public class S_roomUser{
             int max_num = 100;
             String realurl = index_url + "&start="+start;
             String accresult = "";
+            String[] random_proxy = ProxyChooser.chooseproxy();
             while (true) {
                 try {
-                    String[] random_proxy = ProxyChooser.chooseproxy();
+
                     RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
                     if (tap.getStatusCode() != 200)
                     {
                         throw new ResultErrorException("code error");
                     }
                     accresult = tap.readToText();
+                    if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                        ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                     break;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                        ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                     try_num += 1;
                     if (try_num >= max_num + 1) {
                         break;
