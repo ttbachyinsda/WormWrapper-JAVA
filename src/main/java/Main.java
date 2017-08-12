@@ -37,7 +37,7 @@ public class Main {
             e.printStackTrace();
         }
         ServantEventMain.database = database;
-        ServantEventMain.initialcollection(true);
+        ServantEventMain.initialcollection(false);
 //        try {
 //            ServantEventMain.readyrun();
 //        } catch (Exception e) {
