@@ -14,6 +14,7 @@ while True:
             d = json.loads(c.text, encoding='utf-8')
             timestampstr = str(time.time())
             i = 0
+            print(len(d["lives"]))
             for element in d["lives"]:
                 i += 1
                 location = str(element["creator"]["location"])
@@ -22,7 +23,7 @@ while True:
                 res = timestampstr+' '+str(i)+' '+str(element["id"])+' '+location\
                       +' '+str(element["creator"]["gender"])+' '+str(element["creator"]["level"])+' '+str(element["online_users"])
                 #break
-                print(res)
+                #print(res)
                 outfile.write(str(res)+'\n')
             break
         except Exception as e:
