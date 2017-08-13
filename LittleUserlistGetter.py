@@ -1,18 +1,38 @@
 import requests
 import time
 import json
+import datetime
+now = datetime.datetime.now()
+timestr = now.strftime('%Y-%m-%d-%H-%M-%S')
+outfile = open(timestr+".txt", "w+")
+js = 0
 while True:
-    outfile = open(str(time.time())+".txt", "w")
     while True:
         print(time.localtime(time.time()))
         try:
             c = requests.get("http://120.55.238.158/api/live/simpleall")
             d = json.loads(c.text, encoding='utf-8')
+            timestampstr = str(time.time())
+            i = 0
             for element in d["lives"]:
-                s = element["id"]
-                outfile.write(str(s)+'\n')
+                i += 1
+                location = str(element["creator"]["location"])
+                if (location == ''):
+                    location = 'EMPTY'
+                res = timestampstr+' '+str(i)+' '+str(element["id"])+' '+location\
+                      +' '+str(element["creator"]["gender"])+' '+str(element["creator"]["level"])+' '+str(element["online_users"])
+                #break
+                print(res)
+                outfile.write(str(res)+'\n')
             break
         except Exception as e:
+            print(e)
             continue
-    outfile.close()
     time.sleep(60)
+    js += 1
+    if (js == 60):
+        outfile.close()
+        js = 0
+        now = datetime.datetime.now()
+        timestr = now.strftime('%Y-%m-%d-%H-%M-%S')
+        outfile = open(timestr + ".txt", "w+")
