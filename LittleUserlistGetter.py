@@ -4,7 +4,7 @@ import json
 import datetime
 now = datetime.datetime.now()
 timestr = now.strftime('%Y-%m-%d-%H-%M-%S')
-outfile = open(timestr+".txt", "w+")
+outfile = open(timestr+".txt", "w+",encoding='utf-8')
 js = 0
 while True:
     while True:
