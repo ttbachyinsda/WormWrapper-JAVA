@@ -7,7 +7,7 @@ public class ProxyThread extends TimerTask {
 
     @Override
     public void run() {
-        if (ProxyChooser.proxymap.size() < 100) {
+        if (ProxyChooser.proxymap.size() < 300) {
             System.out.println("updated " + ProxyChooser.proxymap.size());
             ProxyChooser.getnewproxy();
         }

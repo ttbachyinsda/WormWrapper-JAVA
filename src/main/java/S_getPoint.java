@@ -40,14 +40,20 @@ public class S_getPoint{
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim()).append("ts", ts.toString());
-                    collection.insertOne(doc, new SingleResultCallback<Void>() {
-                        @Override
-                        public void onResult(Void aVoid, Throwable throwable) {
-                            Main.havesent ++;
-                        }
-                    });
+                    Document doc;
+                    if (info.containsKey("result")) {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", info.getString("result")+"|"+result.trim());
+                    } else {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", result.trim());
+                    }
+//                    collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                        @Override
+//                        public void onResult(Void aVoid, Throwable throwable) {
+//                            Main.havesent ++;
+//                        }
+//                    });
                     return doc;
                 }
 
@@ -67,21 +73,27 @@ public class S_getPoint{
                 if (!mout.find()) throw new ResultErrorException("Result of getpoint outx is Error. "+accresult);
                 String[] sin = min.group().split(":");
                 String[] sout = mout.group().split(":");
-                String result = sin[sin.length-1]+" "+sout[sout.length-1];
+                String result = sin[sin.length-1]+sout[sout.length-1];
                 //genmap(result);
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
                     ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
-                Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                        .append("result", result.trim()).append("ts", ts.toString());
-                collection.insertOne(doc, new SingleResultCallback<Void>() {
-                    @Override
-                    public void onResult(Void aVoid, Throwable throwable) {
-                        Main.havesent ++;
-                    }
-                });
+                Document doc;
+                if (info.containsKey("result")) {
+                    doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                            .append("result", info.getString("result")+"|"+result.trim());
+                } else {
+                    doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                            .append("result", result.trim());
+                }
+//                collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                    @Override
+//                    public void onResult(Void aVoid, Throwable throwable) {
+//                        Main.havesent ++;
+//                    }
+//                });
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
@@ -95,14 +107,20 @@ public class S_getPoint{
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim()).append("ts", ts.toString());
-                    collection.insertOne(doc, new SingleResultCallback<Void>() {
-                        @Override
-                        public void onResult(Void aVoid, Throwable throwable) {
-                            Main.havesent ++;
-                        }
-                    });
+                    Document doc;
+                    if (info.containsKey("result")) {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", info.getString("result")+"|"+result.trim());
+                    } else {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", result.trim());
+                    }
+//                    collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                        @Override
+//                        public void onResult(Void aVoid, Throwable throwable) {
+//                            Main.havesent ++;
+//                        }
+//                    });
                     return doc;
                 }
             }

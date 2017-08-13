@@ -27,7 +27,7 @@ public class S_nowPublish{
         String ykid = info.getString("ykid");
         String index_url = "http://service.inke.com/api/live/now_publish?cv=IK3.7.20_Android&uid=251464826&id=" + ykid;
         int try_num = 0;
-        int max_num = 100;
+        int max_num = 200;
         String result, trueresult;
         Timestamp pret = new Timestamp(System.currentTimeMillis());
         while (true){
@@ -43,14 +43,20 @@ public class S_nowPublish{
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim()).append("ts", ts.toString());
-                    collection.insertOne(doc, new SingleResultCallback<Void>() {
-                        @Override
-                        public void onResult(Void aVoid, Throwable throwable) {
-                            Main.havesent ++;
-                        }
-                    });
+                    Document doc;
+                    if (info.containsKey("result")) {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("nowpublish", result.trim()).append("result", info.getString("result")+"|"+"False");
+                    } else {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("nowpublish", result.trim()).append("result", "False");
+                    }
+//                    collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                        @Override
+//                        public void onResult(Void aVoid, Throwable throwable) {
+//                            Main.havesent ++;
+//                        }
+//                    });
                     return doc;
                 }
 
@@ -74,16 +80,22 @@ public class S_nowPublish{
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
-                Document doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                        .append("result", result.trim());
+                Document doc;
+                if (info.containsKey("result")) {
+                    doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                            .append("nowpublish", result.trim()).append("result", info.getString("result")+"|"+trueresult);
+                } else {
+                    doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                            .append("nowpublish", result.trim()).append("result", trueresult);
+                }
                 Document doc2 = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
                         .append("nowpublish", trueresult).append("ts", ts.toString());
-                collection.insertOne(doc2, new SingleResultCallback<Void>() {
-                    @Override
-                    public void onResult(Void aVoid, Throwable throwable) {
-                        Main.havesent ++;
-                    }
-                });
+//                collection.insertOne(doc2, new SingleResultCallback<Void>() {
+//                    @Override
+//                    public void onResult(Void aVoid, Throwable throwable) {
+//                        Main.havesent ++;
+//                    }
+//                });
                 return doc;
             }catch (Exception e) {
 //                try {
@@ -102,16 +114,22 @@ public class S_nowPublish{
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim());
+                    Document doc;
+                    if (info.containsKey("result")) {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("nowpublish", result.trim()).append("result", info.getString("result")+"|"+trueresult);
+                    } else {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("nowpublish", result.trim()).append("result", trueresult);
+                    }
                     Document doc2 = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
                             .append("nowpublish", trueresult).append("ts", ts.toString());
-                    collection.insertOne(doc2, new SingleResultCallback<Void>() {
-                        @Override
-                        public void onResult(Void aVoid, Throwable throwable) {
-                            Main.havesent ++;
-                        }
-                    });
+//                    collection.insertOne(doc2, new SingleResultCallback<Void>() {
+//                        @Override
+//                        public void onResult(Void aVoid, Throwable throwable) {
+//                            Main.havesent ++;
+//                        }
+//                    });
                     return doc;
                 }
             }

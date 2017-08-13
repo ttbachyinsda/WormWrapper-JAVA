@@ -53,7 +53,7 @@ public class ProxyChooser {
         }
     }
     public static void getnewproxy() {
-        String index_url= "http://dev.kuaidaili.com/api/getproxy/?orderid=910263180614597&num=200&b_pcchrome=1&b_pcie=1&b_pcff=1&b_android=1&b_iphone=1&b_ipad=1&protocol=1&method=2&an_an=1&an_ha=1&sep=1";
+        String index_url= "http://dev.kuaidaili.com/api/getproxy/?orderid=910263180614597&num=500&b_pcchrome=1&b_pcie=1&b_pcff=1&b_android=1&b_iphone=1&b_ipad=1&protocol=1&method=2&an_an=1&an_ha=1&sep=1";
         List<String> newproxies = new ArrayList<>();
         try {
             RawResponse tap = Requests.get(index_url).timeout(8000).send();

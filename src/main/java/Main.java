@@ -23,11 +23,11 @@ public class Main {
     public static int shouldsend;
     public static int havesent;
     public static void main(String[] args){
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
-        rootLogger.setLevel(Level.OFF);
-        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1");
-        MongoDatabase database = mongoClient.getDatabase("user");
+//        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+//        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
+//        rootLogger.setLevel(Level.OFF);
+//        MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1");
+//        MongoDatabase database = mongoClient.getDatabase("user");
         TimerTask pt = new ProxyThread();
         Timer c = new Timer();
         c.schedule(pt,0,10000);
@@ -36,8 +36,8 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ServantEventMain.database = database;
-        ServantEventMain.initialcollection(false);
+//        ServantEventMain.database = database;
+//        ServantEventMain.initialcollection(false);
 //        try {
 //            ServantEventMain.readyrun();
 //        } catch (Exception e) {
@@ -45,12 +45,12 @@ public class Main {
 //        }
         Set<String> methodlist = new HashSet<>();
         //methodlist.add("getboard");
-        methodlist.add("getfans");
+        methodlist.add("getfans getpoint nowpublish onlineuser");
         //methodlist.add("getinfo");
-        methodlist.add("getpoint");
+        //methodlist.add("getpoint");
         //methodlist.add("getstatus");
         //methodlist.add("goodvoice");
-        methodlist.add("nowpublish onlineuser");
+        //methodlist.add("nowpublish onlineuser");
         //methodlist.add("roomuser");
         //methodlist.add("simpleall");
         //methodlist.add("skill");
@@ -59,6 +59,7 @@ public class Main {
         havesent = 0;
         int methodnum = 4;
         Master.call(methodlist,60000,60,-1, methodnum);
+        //Master.getList(methodlist,60,methodnum);
 //        new FakeMaster().call(collection);
 //        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
 //            @Override

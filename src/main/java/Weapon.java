@@ -117,7 +117,7 @@ public class Weapon {
         {
             return document.getString("roomid");
         } else {
-            String result = document.getString("result");
+            String result = document.getString("nowpublish");
             String[] params = new String[2];
             if (result.equals("")){
                 params[0] = "False";

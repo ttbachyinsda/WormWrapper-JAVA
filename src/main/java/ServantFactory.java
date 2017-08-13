@@ -74,5 +74,6 @@ public class ServantFactory implements Runnable {
                     System.out.println("Unknown method " + method);
             }
         }
+        OutPrinter.Print(tempinfo.getString("ts")+"|"+tempinfo.getString("ykid")+"|"+tempinfo.getString("result"));
     }
 }

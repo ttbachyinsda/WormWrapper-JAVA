@@ -42,14 +42,20 @@ public class S_getFans{
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("timestamp", info.getString("ts"))
-                            .append("ykid", ykid).append("result", result.trim()).append("ts", ts.toString());
-                    collection.insertOne(doc, new SingleResultCallback<Void>() {
-                        @Override
-                        public void onResult(Void aVoid, Throwable throwable) {
-                            Main.havesent ++;
-                        }
-                    });
+                    Document doc;
+                    if (info.containsKey("result")) {
+                        doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
+                                .append("result", info.getString("result")+"|"+result.trim()).append("ts", ts.toString());
+                    } else {
+                        doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
+                                .append("result", result.trim()).append("ts", ts.toString());
+                    }
+//                    collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                        @Override
+//                        public void onResult(Void aVoid, Throwable throwable) {
+//                            Main.havesent ++;
+//                        }
+//                    });
                     return doc;
                 }
                 RawResponse tap = Requests.get(index_url).headers(Parameter.of("User-Agent", ProxyChooser.chooseagent())).timeout(500).proxy(Proxies.httpProxy(random_proxy[0], Integer.parseInt(random_proxy[1]))).send();
@@ -75,14 +81,20 @@ public class S_getFans{
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
                     ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
-                Document doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                        .append("result", result.trim()).append("ts", ts.toString());
-                collection.insertOne(doc, new SingleResultCallback<Void>() {
-                    @Override
-                    public void onResult(Void aVoid, Throwable throwable) {
-                        Main.havesent ++;
-                    }
-                });
+                Document doc;
+                if (info.containsKey("result")) {
+                    doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                            .append("result", info.getString("result")+"|"+result.trim());
+                } else {
+                    doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                            .append("result", result.trim());
+                }
+//                collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                    @Override
+//                    public void onResult(Void aVoid, Throwable throwable) {
+//                        Main.havesent ++;
+//                    }
+//                });
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
@@ -96,14 +108,20 @@ public class S_getFans{
                     ThreadPool.TotalTrynum += try_num;
                     ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
-                    Document doc = new Document("timestamp", info.getString("ts"))
-                            .append("ykid", ykid).append("result", result.trim()).append("ts", ts.toString());
-                    collection.insertOne(doc, new SingleResultCallback<Void>() {
-                        @Override
-                        public void onResult(Void aVoid, Throwable throwable) {
-                            Main.havesent ++;
-                        }
-                    });
+                    Document doc;
+                    if (info.containsKey("result")) {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", info.getString("result")+"|"+result.trim());
+                    } else {
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", result.trim());
+                    }
+//                    collection.insertOne(doc, new SingleResultCallback<Void>() {
+//                        @Override
+//                        public void onResult(Void aVoid, Throwable throwable) {
+//                            Main.havesent ++;
+//                        }
+//                    });
                     return doc;
                 }
             }

@@ -22,6 +22,6 @@ public class TaskExecutor extends Thread {
     }
     @Override
     public void run() {
-        Master.getHotList(methodlist, politetime, methodnum);
+        Master.getList(methodlist, politetime, methodnum);
     }
 }

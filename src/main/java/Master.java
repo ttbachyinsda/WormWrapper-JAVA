@@ -6,6 +6,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.Future;
@@ -22,6 +26,22 @@ public class Master {
             document.append("method", element);
             //ServantEventMain.ringBuffer.publishEvent(ServantEventMain::translate, document, ServantEventMain.collectionlist);
             ThreadPool.pool.execute(new ServantFactory(document));
+        }
+    }
+    public static void getList(Set<String> methodlist, int politetime, int methodnum){
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream("outputlist.txt")));
+            String data = null;
+            String tsstr = String.valueOf(System.currentTimeMillis());
+            while((data = br.readLine())!=null)
+            {
+                Document document = new Document("ykid",data).append("ts", tsstr);
+                pushit(methodlist,document,0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
         }
     }
     //修改gethotlist函数的相关方法，可以将热门列表修改为指定列表
@@ -43,6 +63,7 @@ public class Master {
             }
         }
         JSONArray jsonArray = (JSONArray)jsonObject.get("lives");
+        String tsstr = String.valueOf(System.currentTimeMillis());
         for (int i=0;i<jsonArray.size();i++)
         {
             //System.out.println(i);
@@ -55,7 +76,7 @@ public class Master {
             long level = (Long) creator.get("level");
             String ykid = String.valueOf(id);
             Timestamp ts = new Timestamp(System.currentTimeMillis());
-            Document document = new Document("ykid",ykid).append("ts", ts.toString());
+            Document document = new Document("ykid",ykid).append("ts", tsstr);
             for (int j=0;j<2;j++)
                 pushit(methodlist,document,i);
         }
