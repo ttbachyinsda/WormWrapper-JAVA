@@ -20,7 +20,7 @@ while True:
                 location = str(element["creator"]["location"])
                 if (location == ''):
                     location = 'EMPTY'
-                res = timestampstr+' '+str(i)+' '+str(element["id"])+' '+location\
+                res = timestampstr+' '+str(i)+' '+str(element["creator"]["id"])+' '+location\
                       +' '+str(element["creator"]["gender"])+' '+str(element["creator"]["level"])+' '+str(element["online_users"])
                 #break
                 #print(res)
@@ -31,7 +31,7 @@ while True:
             continue
     time.sleep(60)
     js += 1
-    if (js == 60):
+    if (js == 30):
         outfile.close()
         js = 0
         now = datetime.datetime.now()
