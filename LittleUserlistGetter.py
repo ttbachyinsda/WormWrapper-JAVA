@@ -11,6 +11,7 @@ while True:
         print(time.localtime(time.time()))
         try:
             c = requests.get("http://120.55.238.158/api/live/simpleall")
+            print(type(c.text))
             d = json.loads(c.text, encoding='utf-8')
             timestampstr = str(time.time())
             i = 0
@@ -28,7 +29,7 @@ while True:
             break
         except Exception as e:
             print(e)
-            continue
+            break
     time.sleep(60)
     js += 1
     if (js == 30):

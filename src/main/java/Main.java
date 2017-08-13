@@ -31,8 +31,11 @@ public class Main {
         TimerTask pt = new ProxyThread();
         Timer c = new Timer();
         c.schedule(pt,0,10000);
+        TimerTask dt = new PrinterThread();
+        Timer d = new Timer();
+        d.schedule(dt,300000,300000);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
