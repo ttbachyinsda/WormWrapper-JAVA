@@ -12,7 +12,9 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,7 @@ import java.util.regex.Pattern;
 public class S_roomUser{
     public static MongoCollection<Document> collection;
     public static Document run(Document info, boolean with_proxy) {
+        Set<String> havechoice = new HashSet<>();
         String ykid = info.getString("ykid");
         String roomid = Weapon.getroomid(info);
         String index_url = "http://120.55.238.158/api/live/users?uid=251464826&count=20&id=" + roomid;
@@ -32,7 +35,8 @@ public class S_roomUser{
             int max_num = 100;
             String realurl = index_url + "&start="+start;
             String accresult = "";
-            String[] random_proxy = ProxyChooser.chooseproxy();
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,false);
+            havechoice.add(random_proxy[2]);
             while (true) {
                 try {
 
@@ -42,13 +46,13 @@ public class S_roomUser{
                         throw new ResultErrorException("code error");
                     }
                     accresult = tap.readToText();
-                    if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                        ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
+//                    if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+//                        ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
                     break;
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                        ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+//                    if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+//                        ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                     try_num += 1;
                     if (try_num >= max_num + 1) {
                         break;

@@ -12,11 +12,14 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 /**
  * Created by zjkgf on 2017/7/29.
@@ -24,13 +27,26 @@ import static java.lang.Math.max;
 public class S_getFans{
     public static MongoCollection<Document> collection;
     public static Document run(Document info, boolean with_proxy) {
+        Set<String> havechoice = new HashSet<>();
         String ykid = info.getString("ykid");
         String index_url = "http://120.55.238.158/api/user/relation/numrelations?uid=251464826&id=" + ykid;
         int try_num = 0;
         int max_num = 100;
         Timestamp pret = new Timestamp(System.currentTimeMillis());
+        if (info.containsKey("forcestop")){
+            Document doc;
+            if (info.containsKey("result")) {
+                doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                        .append("result", info.getString("result")+"|").append("forcestop", "forcestop");
+            } else {
+                doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                        .append("result", "").append("forcestop", "forcestop");
+            }
+            return doc;
+        }
         while (true){
-            String[] random_proxy = ProxyChooser.chooseproxy();
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice, false);
+            havechoice.add(random_proxy[2]);
             try{
                 //System.out.println(ykid+" "+"getfans");
                 Timestamp next = new Timestamp(System.currentTimeMillis());
@@ -44,11 +60,11 @@ public class S_getFans{
                     Timestamp ts = new Timestamp(System.currentTimeMillis());
                     Document doc;
                     if (info.containsKey("result")) {
-                        doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                                .append("result", info.getString("result")+"|"+result.trim()).append("ts", ts.toString());
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", info.getString("result")+"|"+result.trim());
                     } else {
-                        doc = new Document("timestamp", info.getString("ts")).append("ykid", ykid)
-                                .append("result", result.trim()).append("ts", ts.toString());
+                        doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                                .append("result", result.trim());
                     }
 //                    collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                        @Override
@@ -78,8 +94,8 @@ public class S_getFans{
                 //genmap(result);
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
-                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
+//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+//                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
                 Document doc;
                 if (info.containsKey("result")) {
@@ -98,8 +114,8 @@ public class S_getFans{
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
-                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+//                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETFANS TIMEOUT");

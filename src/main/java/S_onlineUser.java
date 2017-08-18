@@ -12,14 +12,12 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Math.max;
-
+import static java.lang.Math.min;
 /**
  * Created by zjkgf on 2017/7/31.
  */
@@ -27,7 +25,19 @@ public class S_onlineUser{
 
     public static MongoCollection<Document> collection;
     public static Document run(Document info, boolean with_proxy) {
+        Set<String> havechoice = new HashSet<>();
         String ykid = info.getString("ykid");
+        if (info.containsKey("forcestop")){
+            Document doc;
+            if (info.containsKey("result")) {
+                doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                        .append("result", info.getString("result")+"|").append("forcestop", "forcestop");
+            } else {
+                doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
+                        .append("result", "").append("forcestop", "forcestop");
+            }
+            return doc;
+        }
         String roomid = Weapon.getroomid(info);
         String index_url = "http://120.55.238.158/api/live/info?uid=251464826&id=" + roomid;
         int start = 0;
@@ -37,9 +47,9 @@ public class S_onlineUser{
         String realurl = index_url + "&start="+start;
         String accresult = "";
         Timestamp pret = new Timestamp(System.currentTimeMillis());
-
         while (true) {
-            String[] random_proxy = ProxyChooser.chooseproxy();
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,false);
+            havechoice.add(random_proxy[2]);
             try {
 
                 //System.out.println(ykid+" "+"onlineuser");
@@ -75,13 +85,13 @@ public class S_onlineUser{
                     throw new ResultErrorException("code error");
                 }
                 accresult = tap.readToText();
-                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])-1);
+//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+//                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 break;
             } catch (Exception e) {
                 //e.printStackTrace();
-                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+//                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num + 1) {
                     System.out.println("ONLINEUSER TIMEOUT");
@@ -111,10 +121,10 @@ public class S_onlineUser{
         Document doc;
         if (info.containsKey("result")) {
             doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                    .append("result", info.getString("result")+"|"+result.toString().trim());
+                    .append("result", info.getString("result")+"|"+result.toString().trim()+" "+roomid);
         } else {
             doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                    .append("result", result.toString().trim());
+                    .append("result", result.toString().trim()+" "+roomid);
         }
 //        collection.insertOne(doc, new SingleResultCallback<Void>() {
 //            @Override

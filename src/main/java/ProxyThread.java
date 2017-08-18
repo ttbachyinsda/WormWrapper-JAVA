@@ -7,13 +7,18 @@ public class ProxyThread extends TimerTask {
 
     @Override
     public void run() {
-        if (ProxyChooser.proxymap.size() < 300) {
-            System.out.println("updated " + ProxyChooser.proxymap.size());
-            ProxyChooser.getnewproxy();
+        if (ProxyChooser.proxymap.size() < ProxyChooser.threshold) {
+            if (ProxyChooser.RUN == false) {
+                System.out.println("updated " + String.valueOf(ProxyChooser.proxymap.size())+" "+String.valueOf(ProxyChooser.waitmap.size()));
+                ProxyChooser.getnewproxy();
+                ProxyChooser.removeredundantproxy();
+            } else {
+                System.out.println("waited "+ String.valueOf(ProxyChooser.proxymap.size())+" "+String.valueOf(ProxyChooser.waitmap.size()));
+            }
         }
         else {
             ProxyChooser.removeredundantproxy();
-            System.out.println("not updated "+ProxyChooser.proxymap.size());
+            System.out.println("not updated "+String.valueOf(ProxyChooser.proxymap.size())+" "+String.valueOf(ProxyChooser.waitmap.size()));
         }
     }
 }

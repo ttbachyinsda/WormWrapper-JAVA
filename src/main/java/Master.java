@@ -1,6 +1,7 @@
 import com.mongodb.async.SingleResultCallback;
 import net.dongliu.requests.Requests;
 import org.bson.Document;
+import org.javatuples.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,6 +35,9 @@ public class Master {
             br = new BufferedReader(new InputStreamReader(new FileInputStream("outputlist.txt")));
             String data = null;
             String tsstr = String.valueOf(System.currentTimeMillis());
+            System.out.println("push "+ ThreadPool.pool.isTerminated()+" "+ThreadPool.pool.toString());
+            System.out.println("push "+ ThreadPool.pool2.isTerminated()+" "+ThreadPool.pool2.toString());
+            System.out.println("push "+ ThreadPool.pool3.isTerminated()+" "+ThreadPool.pool3.toString());
             while((data = br.readLine())!=null)
             {
                 Document document = new Document("ykid",data).append("ts", tsstr);
@@ -87,6 +91,10 @@ public class Master {
             int nowtime = 0;
             while (true) {
                 System.out.println("运行到第"+String.valueOf(nowtime)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                for (String element:ProxyChooser.proxymap.keySet()){
+                    System.out.println(element+" "+String.valueOf(ProxyChooser.proxymap.get(element)));
+                    //ProxyChooser.proxymap.replace(element, Pair.with(ProxyChooser.proxymap.get(element).getValue0(),0));
+                }
                 new TaskExecutor(methodlist, delaytime, politetime, maxtime, methodnum).start();
                 try {
                     Thread.sleep(delaytime);

@@ -8,13 +8,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class OutPrinter {
     public static Queue<String> resultlist = new ConcurrentLinkedQueue<>();
+    public static String prefix = "";
     public static void Print(String result){
+        //System.out.println(result);
         resultlist.add(result);
     }
     public static void Clear(){
         int num = 0;
         try {
-            FileOutputStream out = new FileOutputStream(new File("./src/"+String.valueOf(System.currentTimeMillis())+".txt"));
+            String pathname = "./src/"+prefix+String.valueOf(System.currentTimeMillis())+".txt";
+            System.out.println(pathname);
+            FileOutputStream out = new FileOutputStream(new File(pathname));
             while (num < 10000 && !resultlist.isEmpty())
             {
                 num = num + 1;
