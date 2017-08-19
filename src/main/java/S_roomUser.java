@@ -35,7 +35,7 @@ public class S_roomUser{
             int max_num = 100;
             String realurl = index_url + "&start="+start;
             String accresult = "";
-            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,false);
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice);
             havechoice.add(random_proxy[2]);
             while (true) {
                 try {

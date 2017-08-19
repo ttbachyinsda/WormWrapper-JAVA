@@ -36,7 +36,7 @@ public class S_nowPublish{
         String result, trueresult;
         Timestamp pret = new Timestamp(System.currentTimeMillis());
         while (true){
-            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,true);
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice);
             havechoice.add(random_proxy[2]);
             try{
                 //System.out.println(ykid+" "+"nowpublish");
@@ -81,11 +81,11 @@ public class S_nowPublish{
                     trueresult = "False";
                 }
                 //genmap(result);
-                synchronized (ProxyChooser.proxymap) {
-                    if (ProxyChooser.proxymap.containsKey(random_proxy[2])) {
-                        ProxyChooser.proxymap.replace(random_proxy[2], Pair.with(max(ProxyChooser.proxymap.get(random_proxy[2]).getValue0()-20,-2000), ProxyChooser.proxymap.get(random_proxy[2]).getValue1()+1));
-                    }
-                }
+//                synchronized (ProxyChooser.proxymap) {
+//                    if (ProxyChooser.proxymap.containsKey(random_proxy[2])) {
+//                        ProxyChooser.proxymap.replace(random_proxy[2], Pair.with(max(ProxyChooser.proxymap.get(random_proxy[2]).getValue0()-20,-2000), ProxyChooser.proxymap.get(random_proxy[2]).getValue1()+1));
+//                    }
+//                }
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -117,12 +117,12 @@ public class S_nowPublish{
 //                } catch (InterruptedException e1) {
 //                    e1.printStackTrace();
 //                }
-                synchronized (ProxyChooser.proxymap) {
-                    if (ProxyChooser.proxymap.containsKey(random_proxy[2])) {
-                        Pair<Integer,Integer> c = ProxyChooser.proxymap.get(random_proxy[2]);
-                        ProxyChooser.proxymap.replace(random_proxy[2], Pair.with(c.getValue0()+10, c.getValue1()));
-                    }
-                }
+//                synchronized (ProxyChooser.proxymap) {
+//                    if (ProxyChooser.proxymap.containsKey(random_proxy[2])) {
+//                        Pair<Integer,Integer> c = ProxyChooser.proxymap.get(random_proxy[2]);
+//                        ProxyChooser.proxymap.replace(random_proxy[2], Pair.with(c.getValue0()+10, c.getValue1()));
+//                    }
+//                }
 
                 try_num += 1;
                 if (try_num >= max_num+1) {

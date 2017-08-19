@@ -43,7 +43,7 @@ public class S_getPoint{
             return doc;
         }
         while (true){
-            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,false);
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice);
             havechoice.add(random_proxy[2]);
             try{
                 //System.out.println(ykid+" "+"getpoint");
@@ -59,10 +59,10 @@ public class S_getPoint{
                     Document doc;
                     if (info.containsKey("result")) {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", info.getString("result")+"|"+result.trim());
+                                .append("result", info.getString("result")+"|"+result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     } else {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", result.trim());
+                                .append("result", result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     }
 //                    collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                        @Override
@@ -91,18 +91,18 @@ public class S_getPoint{
                 String[] sout = mout.group().split(":");
                 String result = sin[sin.length-1]+sout[sout.length-1];
                 //genmap(result);
-//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-//                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
                 Document doc;
                 if (info.containsKey("result")) {
                     doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                            .append("result", info.getString("result")+"|"+result.trim());
+                            .append("result", info.getString("result")+"|"+result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                 } else {
                     doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim());
+                            .append("result", result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                 }
 //                collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                    @Override
@@ -113,8 +113,8 @@ public class S_getPoint{
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
-//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-//                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETPOINT TIMEOUT");
@@ -126,10 +126,10 @@ public class S_getPoint{
                     Document doc;
                     if (info.containsKey("result")) {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", info.getString("result")+"|"+result.trim());
+                                .append("result", info.getString("result")+"|"+result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     } else {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", result.trim());
+                                .append("result", result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     }
 //                    collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                        @Override

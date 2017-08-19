@@ -38,17 +38,18 @@ public class S_onlineUser{
             }
             return doc;
         }
-        String roomid = Weapon.getroomid(info);
+        //String roomid = Weapon.getroomid(info);
+        String roomid = info.getString("roomid");
         String index_url = "http://120.55.238.158/api/live/info?uid=251464826&id=" + roomid;
         int start = 0;
         StringBuffer result = new StringBuffer();
         int try_num = 0;
-        int max_num = 100;
+        int max_num = 200;
         String realurl = index_url + "&start="+start;
         String accresult = "";
         Timestamp pret = new Timestamp(System.currentTimeMillis());
         while (true) {
-            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,false);
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice);
             havechoice.add(random_proxy[2]);
             try {
 
@@ -65,10 +66,10 @@ public class S_onlineUser{
                     Document doc;
                     if (info.containsKey("result")) {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", info.getString("result")+"|"+result.toString().trim());
+                                .append("result", info.getString("result")+"|"+result.toString().trim()).append("onlinestatus", "0");
                     } else {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", result.toString().trim());
+                                .append("result", result.toString().trim()).append("onlinestatus", "0");
                     }
 //                    collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                        @Override
@@ -85,13 +86,13 @@ public class S_onlineUser{
                     throw new ResultErrorException("code error");
                 }
                 accresult = tap.readToText();
-//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-//                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 break;
             } catch (Exception e) {
                 //e.printStackTrace();
-//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-//                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num + 1) {
                     System.out.println("ONLINEUSER TIMEOUT");
@@ -101,13 +102,23 @@ public class S_onlineUser{
         }
         List<String> lin = new ArrayList<String>();
         String inx = "\"online_users\": \\d+";
+        String oux = "\"status\": \\d+";
         Pattern pin = Pattern.compile(inx);
         Matcher min = pin.matcher(accresult);
+        Pattern pout = Pattern.compile(oux);
+        Matcher mout = pout.matcher(accresult);
 
         while (min.find())
         {
             String[] sin = min.group().split(" ");
             lin.add(sin[sin.length-1]);
+        }
+
+        String status = "0";
+        while (mout.find()){
+            String[] sout = mout.group().split(" ");
+            status = sout[sout.length-1];
+            break;
         }
         for (String element:lin){
             result.append(element);
@@ -121,10 +132,10 @@ public class S_onlineUser{
         Document doc;
         if (info.containsKey("result")) {
             doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                    .append("result", info.getString("result")+"|"+result.toString().trim()+" "+roomid);
+                    .append("result", info.getString("result")+"|"+result.toString().trim()+" "+roomid).append("onlinestatus", status);
         } else {
             doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                    .append("result", result.toString().trim()+" "+roomid);
+                    .append("result", result.toString().trim()+" "+roomid).append("onlinestatus", status);
         }
 //        collection.insertOne(doc, new SingleResultCallback<Void>() {
 //            @Override

@@ -74,6 +74,12 @@ public class ServantFactory implements Runnable {
                     System.out.println("Unknown method " + method);
             }
         }
-        OutPrinter.Print(tempinfo.getString("ts")+"|"+tempinfo.getString("ykid")+"|"+tempinfo.getString("result"));
+//        System.out.println("remove "+tempinfo.getString("ykid")+" "+tempinfo.getString("result")+" "+tempinfo.getString("onlinestatus"));
+        if (tempinfo.getString("onlinestatus").equals("0")){
+            //System.out.println("remove "+tempinfo.getString("ykid")+" "+tempinfo.getString("result")+" "+tempinfo.getString("onlinestatus"));
+            FakeMaster.nowset.remove(tempinfo.getString("ykid"));
+        }
+        //System.out.println(tempinfo.getString("ts")+"|"+tempinfo.getString("ykid")+"|"+tempinfo.getString("result")+"|"+tempinfo.getString("onlinestatus"));
+        OutPrinter.Print2(tempinfo.getString("ts")+"|"+tempinfo.getString("ykid")+"|"+tempinfo.getString("result")+"|"+tempinfo.getString("onlinestatus"));
     }
 }

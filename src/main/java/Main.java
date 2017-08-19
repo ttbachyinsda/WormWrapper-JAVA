@@ -36,7 +36,12 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        while (ProxyChooser.proxymap.size() < ProxyChooser.threshold){
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (ProxyChooser.proxymap.size()<350){
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -45,7 +50,7 @@ public class Main {
         }
         TimerTask dt = new PrinterThread();
         Timer d = new Timer();
-        d.schedule(dt,60000,60000);
+        d.schedule(dt,1800000,1800000);
 //        ServantEventMain.database = database;
 //        ServantEventMain.initialcollection(false);
 //        try {
@@ -56,12 +61,12 @@ public class Main {
         Set<String> methodlist = new HashSet<>();
         //methodlist.add("getboard");
         //methodlist.add("nowpublish onlineuser getfans getpoint");
-        methodlist.add("nowpublish");
+        //methodlist.add("nowpublish");
         //methodlist.add("getinfo");
         //methodlist.add("getpoint");
         //methodlist.add("getstatus");
         //methodlist.add("goodvoice");
-        //methodlist.add("nowpublish onlineuser");
+        methodlist.add("onlineuser getfans getpoint");
         //methodlist.add("roomuser");
         //methodlist.add("simpleall");
         //methodlist.add("skill");
@@ -69,7 +74,7 @@ public class Main {
         shouldsend = 0;
         havesent = 0;
         int methodnum = 4;
-        Master.call(methodlist,60000,60,-1, methodnum);
+        FakeMaster.call(methodlist,60000,60,-1, methodnum);
         //Master.getList(methodlist,60,methodnum);
 //        new FakeMaster().call(collection);
 //        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
@@ -91,22 +96,29 @@ public class Main {
 //                System.out.println(aLong);
 //            }
 //        });
-        ThreadPool.pool.shutdown();
-        while (!ThreadPool.pool.isTerminated())
-        {
+        while (true){
             try {
                 Thread.sleep(2000);
-                System.out.println(ThreadPool.MaxTrynum);
-                System.out.println(ThreadPool.TotalTrynum);
-//                System.out.println(shouldsend);
-//                System.out.println("aaa");
-//                System.out.println(havesent);
-//                System.out.println("bbb");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("Finished");
-        c.cancel();
+//        ThreadPool.pool.shutdown();
+//        while (!ThreadPool.pool.isTerminated())
+//        {
+//            try {
+//                Thread.sleep(2000);
+//                System.out.println(ThreadPool.MaxTrynum);
+//                System.out.println(ThreadPool.TotalTrynum);
+////                System.out.println(shouldsend);
+////                System.out.println("aaa");
+////                System.out.println(havesent);
+////                System.out.println("bbb");
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        System.out.println("Finished");
+//        c.cancel();
     }
 }

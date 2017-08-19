@@ -33,7 +33,7 @@ public class S_simpleAll{
         int try_num = 0;
         int max_num = 100;
         while (true){
-            String[] random_proxy = ProxyChooser.chooseproxy(havechoice,false);
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice);
             havechoice.add(random_proxy[2]);
             try{
 

@@ -45,7 +45,7 @@ public class S_getFans{
             return doc;
         }
         while (true){
-            String[] random_proxy = ProxyChooser.chooseproxy(havechoice, false);
+            String[] random_proxy = ProxyChooser.chooseproxy(havechoice);
             havechoice.add(random_proxy[2]);
             try{
                 //System.out.println(ykid+" "+"getfans");
@@ -61,10 +61,10 @@ public class S_getFans{
                     Document doc;
                     if (info.containsKey("result")) {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", info.getString("result")+"|"+result.trim());
+                                .append("result", info.getString("result")+"|"+result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     } else {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", result.trim());
+                                .append("result", result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     }
 //                    collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                        @Override
@@ -94,16 +94,16 @@ public class S_getFans{
                 //genmap(result);
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
-//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-//                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
                 Document doc;
                 if (info.containsKey("result")) {
                     doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                            .append("result", info.getString("result")+"|"+result.trim());
+                            .append("result", info.getString("result")+"|"+result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                 } else {
                     doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                            .append("result", result.trim());
+                            .append("result", result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                 }
 //                collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                    @Override
@@ -114,8 +114,8 @@ public class S_getFans{
                 return doc;
             }catch (Exception e) {
                 //e.printStackTrace();
-//                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-//                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+                if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
+                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETFANS TIMEOUT");
@@ -127,10 +127,10 @@ public class S_getFans{
                     Document doc;
                     if (info.containsKey("result")) {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", info.getString("result")+"|"+result.trim());
+                                .append("result", info.getString("result")+"|"+result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     } else {
                         doc = new Document("ts", info.getString("ts")).append("ykid", ykid)
-                                .append("result", result.trim());
+                                .append("result", result.trim()).append("onlinestatus", info.getString("onlinestatus"));
                     }
 //                    collection.insertOne(doc, new SingleResultCallback<Void>() {
 //                        @Override

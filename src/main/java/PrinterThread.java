@@ -8,5 +8,6 @@ public class PrinterThread extends TimerTask {
     @Override
     public void run() {
         OutPrinter.Clear();
+        OutPrinter.Clear2();
     }
 }
