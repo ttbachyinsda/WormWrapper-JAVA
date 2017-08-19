@@ -1,4 +1,3 @@
-import net.sf.ehcache.search.aggregator.Max;
 import org.bson.Document;
 
 import java.util.Queue;

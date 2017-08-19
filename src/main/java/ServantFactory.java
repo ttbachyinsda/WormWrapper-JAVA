@@ -1,4 +1,3 @@
-import com.lmax.disruptor.EventFactory;
 import com.mongodb.async.SingleResultCallback;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;

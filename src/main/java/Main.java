@@ -1,18 +1,3 @@
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
-import com.mongodb.Block;
-import com.mongodb.async.SingleResultCallback;
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import com.mongodb.async.client.MongoCollection;
-import com.mongodb.async.client.MongoDatabase;
-import com.mongodb.client.model.Sorts;
-import com.mongodb.client.result.DeleteResult;
-import org.bson.Document;
-import org.slf4j.LoggerFactory;
-
 import javax.print.Doc;
 import java.util.*;
 

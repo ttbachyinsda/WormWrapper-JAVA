@@ -1,6 +1,3 @@
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.mongodb.async.SingleResultCallback;
 import com.mongodb.async.client.MongoCollection;
 import com.mongodb.async.client.MongoDatabase;
@@ -18,9 +15,7 @@ import java.util.concurrent.Executors;
  * Created by zjkgf on 2017/7/31.
  */
 public class ServantEventMain {
-    public static RingBuffer<ServantFactory> ringBuffer;
     public static MongoDatabase database;
-    public static Disruptor<ServantFactory> disruptor;
     public static void initialcollection(boolean cleanflag)
     {
         S_getBoard.collection = database.getCollection("getboard");
@@ -135,6 +130,6 @@ public class ServantEventMain {
 //    }
     public static void forcestop()
     {
-        disruptor.halt();
+
     }
 }
