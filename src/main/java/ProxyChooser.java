@@ -86,7 +86,7 @@ public class ProxyChooser {
     public static void main(String[] args)
     {
         getnewproxy();
-        String[] c = chooseproxy(new HashSet<>());
+        String[] c = chooseproxy(new HashSet<String>());
         System.out.println(c[0]+':'+c[1]);
         System.out.println(chooseagent());
     }
