@@ -95,7 +95,7 @@ public class S_getFans{
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
+                    ProxyChooser.proxymap.put(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
                 Document doc;
                 if (info.containsKey("result")) {
@@ -115,7 +115,7 @@ public class S_getFans{
             }catch (Exception e) {
                 //e.printStackTrace();
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+                    ProxyChooser.proxymap.put(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETFANS TIMEOUT");

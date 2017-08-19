@@ -92,7 +92,7 @@ public class S_getPoint{
                 String result = sin[sin.length-1]+sout[sout.length-1];
                 //genmap(result);
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
+                    ProxyChooser.proxymap.put(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 ThreadPool.TotalTrynum += try_num;
                 ThreadPool.MaxTrynum = max(try_num, ThreadPool.MaxTrynum);
                 Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -114,7 +114,7 @@ public class S_getPoint{
             }catch (Exception e) {
                 //e.printStackTrace();
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+                    ProxyChooser.proxymap.put(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num+1) {
                     System.out.println("GETPOINT TIMEOUT");

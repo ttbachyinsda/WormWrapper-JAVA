@@ -87,12 +87,12 @@ public class S_onlineUser{
                 }
                 accresult = tap.readToText();
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
+                    ProxyChooser.proxymap.put(random_proxy[2], min(0,ProxyChooser.proxymap.get(random_proxy[2])-1));
                 break;
             } catch (Exception e) {
                 //e.printStackTrace();
                 if (ProxyChooser.proxymap.containsKey(random_proxy[2]))
-                    ProxyChooser.proxymap.replace(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
+                    ProxyChooser.proxymap.put(random_proxy[2], ProxyChooser.proxymap.get(random_proxy[2])+1);
                 try_num += 1;
                 if (try_num >= max_num + 1) {
                     System.out.println("ONLINEUSER TIMEOUT");
