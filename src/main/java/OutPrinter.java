@@ -25,7 +25,7 @@ public class OutPrinter {
             String pathname = "./src/"+prefix+String.valueOf(System.currentTimeMillis())+".txt";
             System.out.println(pathname);
             FileOutputStream out = new FileOutputStream(new File(pathname));
-            while (num < 10000 && !resultlist.isEmpty())
+            while (!resultlist.isEmpty())
             {
                 num = num + 1;
                 out.write(resultlist.poll().getBytes());
@@ -43,7 +43,7 @@ public class OutPrinter {
             String pathname = "./src/"+prefix2+String.valueOf(System.currentTimeMillis())+".txt";
             System.out.println(pathname);
             FileOutputStream out = new FileOutputStream(new File(pathname));
-            while (num < 10000 && !resultlist2.isEmpty())
+            while (!resultlist2.isEmpty())
             {
                 num = num + 1;
                 out.write(resultlist2.poll().getBytes());

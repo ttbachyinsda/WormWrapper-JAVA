@@ -90,7 +90,7 @@ public class Master {
         if (maxtime == -1) {
             int nowtime = 0;
             while (true) {
-                System.out.println("运行到第"+String.valueOf(nowtime)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                System.out.println("now begin "+String.valueOf(nowtime)+","+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
                 for (String element:ProxyChooser.proxymap.keySet()){
                     System.out.println(element+" "+String.valueOf(ProxyChooser.proxymap.get(element)));
                     //ProxyChooser.proxymap.replace(element, Pair.with(ProxyChooser.proxymap.get(element).getValue0(),0));
@@ -106,7 +106,7 @@ public class Master {
         }
         else {
             for (int i=0;i<maxtime;i++){
-                System.out.println("运行到第"+String.valueOf(i)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                System.out.println("now begin "+String.valueOf(i)+","+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
                 new TaskExecutor(methodlist, delaytime, politetime, maxtime, methodnum).start();
                 try {
                     Thread.sleep(delaytime);

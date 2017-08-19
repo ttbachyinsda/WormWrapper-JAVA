@@ -127,7 +127,7 @@ public class FakeMaster {
         if (maxtime == -1) {
             int nowtime = 0;
             while (true) {
-                System.out.println("运行到第"+String.valueOf(nowtime)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                System.out.println("now begin "+String.valueOf(nowtime)+", "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
                     //ProxyChooser.proxymap.replace(element, Pair.with(ProxyChooser.proxymap.get(element).getValue0(),0));
                 System.out.println("push "+ ThreadPool.pool.isTerminated()+" "+ThreadPool.pool.toString()+" "+nowset.size());
                 new FakeTaskExecutor(methodlist, delaytime, politetime, maxtime, methodnum).start();
@@ -141,7 +141,7 @@ public class FakeMaster {
         }
         else {
             for (int i=0;i<maxtime;i++){
-                System.out.println("运行到第"+String.valueOf(i)+"次了, "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
+                System.out.println("now begin "+String.valueOf(i)+", "+ String.valueOf(ThreadPool.MaxTrynum) + " " + String.valueOf(ThreadPool.TotalTrynum));
                 new FakeTaskExecutor(methodlist, delaytime, politetime, maxtime, methodnum).start();
                 try {
                     Thread.sleep(delaytime);
